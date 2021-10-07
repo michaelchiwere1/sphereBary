@@ -1,3 +1,4 @@
+function S = healBaryInterp(lb, th, lbk, thk, fjk, Wk)
 %HEALBARYINTERP
 % Implements a bivariate barycentric formula for interpolating on the sphere
 % for interpolation data given at HEALPx points on a sphere.
@@ -8,7 +9,6 @@
 %       fjk : function values at the grid values.
 %       Wk : barycentric weight for interpolating in the latitude direction
 
-function S = healBaryInterp(lb, th, lbk, thk, fjk, Wk)
 M = numel(th); S=zeros(M,1);
 [~,J] = size(fjk);
 % Condition requiring points in the even direction be even

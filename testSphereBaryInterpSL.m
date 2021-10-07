@@ -15,7 +15,7 @@ lbk = lbj(:,floor(m/2)+1:end); thk = thj(:,floor(m/2)+1:end);
 % Barycentric weights in theta
 Wk = tensor.sphereBaryWeights(thk);
 % Evaluation points over the sphere
-N=1000;
+N=m*n;
 lb = (1-2*rand(N,1))*pi;
 th = rand(N,1)*pi;
 tic

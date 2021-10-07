@@ -1,9 +1,10 @@
-% SPHEREBARYINTERPEQG
+function S = sphereBaryInterpEQ(lb,th,lbk, thk, fjk)
+% SPHEREBARYINTERPEQ
 % Computes a bivariate interpolation of a function defined on a sphere when
 % the independent variables are given on an equispaced grid in both latitude and longitude. We require
 % that the number of grid points on the latitude is even.
 % Usage:
-%   S = SPHEREBARYINTERPEQG(lb, th, lbk, thk, fjk)
+%   S = SPHEREBARYINTERPEQ(lb, th, lbk, thk, fjk)
 %       S - column vector of interpolated function.
 %       lb, th - column vectors of nongrid points to interpolate at.
 %       thk, thk - Matrices of grid values.
@@ -11,7 +12,6 @@
 
 
 
-function S = sphereBaryInterpEQG(lb,th,lbk, thk, fjk)
 M = numel(th);
 [n,J] = size(fjk);
 
@@ -36,22 +36,29 @@ wght2 = (-1).^(1:n)';
 sinth = sin(th);
 sintk = sin(thj);
 
+% coefficients for the even interpolant
+coefgd = wght1 .* coeff;
+coefgd(1,:) = (1/2) * coefgd(1,:);
+coefgd(n,:) = (1/2) * coefgd(n,:);
+deno = sum(coefgd,1);
+
+% coefficients for the odd interpolant
+temp = wght2 .* (sintk .* coeff);
+coefdm  = sintk .* temp;
+deno2 = sum(coefdm,1);
 %interpolating in the latitude direction
+
 for k= 1:d
     % Evaluating the even interpolant g_kplus
     sjp = fjkp(:,k);
-    coefgd = wght1 .* coeff;
-    coefgd(1,:) = (1/2) * coefgd(1,:);
-    coefgd(n,:) = (1/2) * coefgd(n,:);
     coefgn = sjp .* coefgd;
-    gjp(:,k) = (sum(coefgn,1)./sum(coefgd,1)).';
+    gjp(:,k) = (sum(coefgn,1)./deno).';
     
     % Evaluating the odd interpolant g_kminus
     sjm = fjkm(:,k);
-    coefnm = wght2 .* (sintk .* coeff);
-    coefdm  = sintk .* coefnm;
-    coefnm = sjm .* coefnm;
-    gjm(:,k) = sinth .* (sum(coefnm,1)./sum(coefdm,1)).';
+    coefnm = sjm .* temp;
+    gjm(:,k) = sinth .* (sum(coefnm,1)./deno2).';
+    
     
 end
 % Evaluation of the whole interpolation by interpolating in the longitude

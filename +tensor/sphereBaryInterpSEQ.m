@@ -1,18 +1,14 @@
-
-% SPHEREBARYINTERPSEQG
+function S = sphereBaryInterpSEQ(lb,th,lbk, thk, fjk)
+% SPHEREBARYINTERPSEQ
 % Implementation of a barycentric interpolation of a unit sphere where the
 % data is given at mid points of the grids on both variables,
 % i.e theta (thk) = ((0:n-1)+1/2)*pi/n, lambda(thk) = -pi+2pi/m*((0:m-1)+1/2).
 % Usage:
-%       S = SPHEREBARYINTERPSEQG(lb,th,lbk,thk, fjk)
+%       S = SPHEREBARYINTERPSEQ(lb,th,lbk,thk, fjk)
 %           S - column vector of interpolated function.
 %           lb, th - column vectors of nongrid points to interpolate at.
 %           thk, lbk - Matrices of grid values.
 %           fjk - Matrix of value of the function on the grid points.
-
-
-
-function S = sphereBaryInterpSEQG(lb,th,lbk, thk, fjk)
 M = numel(th);
 [n,J] = size(fjk);
 
@@ -38,22 +34,26 @@ sintj = sin(thj);
 sinth = sin(th);
 wght2 = (-1).^(1:n)';
 
+% Coefficients for the even interpolant
+denomt = wght .* (sintj .* costh);
+den = sum(denomt,1);
+% Coefficients for the odd interpolant
+temp = wght2 .*   costh;
+coefdm  = sintj.* temp;
+den2 = sum(coefdm,1);
+
 % evaluating interpolant in the longitude direction
 for j= 1:d
     % Even interpolant in theta; g_kplus
     sjp = fjkp(:,j);
-    denom = wght .* (sintj .* costh);
-    num = sjp .* denom;
-    gjp(:,j) = (sum(num,1)./sum(denom,1)).';
+    num = sjp .* denomt;
+    gjp(:,j) = (sum(num,1)./den).';
     
     
     % Odd interpolant in the theta; gkminus
     sjm = fjkm(:,j);
-    coefnm = wght2 .*   costh;
-    coefdm  = sintj.* coefnm;
-    coefnm = sjm .* coefnm;
-    gjm(:,j) = sinth .* (sum(coefnm,1)./sum(coefdm,1)).';
-    
+    coefnm = sjm .* temp;
+    gjm(:,j) = sinth .* (sum(coefnm,1)./den2).';
 end
 
 % Evaluation the whole formula by interpolating in the longitude direction

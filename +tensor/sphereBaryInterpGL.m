@@ -1,3 +1,4 @@
+function S = sphereBaryInterpGL(lb,th,lbk,thk,fjk,Wk)
 % SPHEREBARYINTERPGL
 % Implements a bivariate barrycentric formula for interpolating a
 % function on a sphere. Here we assume the data is given on an equally spaced
@@ -12,8 +13,6 @@
 %       Wk - Weights for interpolating in the theta direction. Weights are
 %       computed as Wk = sphereBaryWeights(thk).
 
-
-function S = sphereBaryInterpGL(lb,th,lbk,thk,fjk,Wk)
 M = numel(th);
 [~,J] = size(fjk);
 % A condition ensuring the number of grid points in longitude is even
@@ -75,7 +74,7 @@ if(mod(n,2)== 0)
     end
     
 else
-% Interpolant in longitude when number of grid points d is odd 
+    % Interpolant in longitude when number of grid points d is odd
     for i = 1:M
         diff = lb(i) - lbj;
         cdiff = csc(diff);

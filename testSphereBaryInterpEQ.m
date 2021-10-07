@@ -17,7 +17,7 @@ N=1000;
 lb = (1-2*rand(N,1))*pi;
 th = rand(N,1)*pi;
 tic
-S = tensor.sphereBaryInterpEQG(lb,th,lbk,thk,fjk);
+S = tensor.sphereBaryInterpEQ(lb,th,lbk,thk,fjk);
 toc
 % Error
 F = s(lb,th);

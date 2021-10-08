@@ -13,6 +13,8 @@ function S = sphereBaryInterpGL(lb,th,lbk,thk,fjk,Wk)
 %       Wk - Weights for interpolating in the theta direction. Weights are
 %       computed as Wk = sphereBaryWeights(thk).
 
+% Author: Michael Chiwere
+
 M = numel(th);
 [~,J] = size(fjk);
 % A condition ensuring the number of grid points in longitude is even

@@ -10,7 +10,7 @@ function S = sphereBaryInterpEQ(lb,th,lbk, thk, fjk)
 %       thk, thk - Matrices of grid values.
 %       fjk - Matrix of value of the function on the grid points.
 
-
+% Author: Michael Chiwere
 
 M = numel(th);
 [n,J] = size(fjk);

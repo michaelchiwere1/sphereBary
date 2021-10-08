@@ -9,6 +9,9 @@ function S = sphereBaryInterpSEQ(lb,th,lbk, thk, fjk)
 %           lb, th - column vectors of nongrid points to interpolate at.
 %           thk, lbk - Matrices of grid values.
 %           fjk - Matrix of value of the function on the grid points.
+
+% Author: Michael Chiwere
+
 M = numel(th);
 [n,J] = size(fjk);
 

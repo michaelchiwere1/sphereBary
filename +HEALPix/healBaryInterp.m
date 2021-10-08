@@ -9,6 +9,8 @@ function S = healBaryInterp(lb, th, lbk, thk, fjk, Wk)
 %       fjk : function values at the grid values.
 %       Wk : barycentric weight for interpolating in the latitude direction
 
+% Author: Michael Chiwere
+
 M = numel(th); S=zeros(M,1);
 [~,J] = size(fjk);
 % Condition requiring points in the even direction be even

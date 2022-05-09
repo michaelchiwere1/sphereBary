@@ -1,5 +1,5 @@
 
-function [Wk,x] = sphereBaryWeights(th)
+function Wk = sphereBaryWeights(th)
 % SPHEREBARYWEIGHTS
 % This funcction computes weights necessary to compute a bivariate
 % barycentric interpolation.
@@ -15,5 +15,6 @@ x = cos(th(:,1));
 w = x - x';
 W = speye(m) + w;
 Wk = 1./prod(W,2);
+
 
 end

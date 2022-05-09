@@ -16,13 +16,14 @@ function S = sphereBaryInterpGL(lb,th,lbk,thk,fjk,Wk)
 % Author: Michael Chiwere
 
 M = numel(th);
-[~,J] = size(fjk);
+[n,J] = size(fjk);
 % A condition ensuring the number of grid points in longitude is even
 if mod(J,2) ~= 0
     error('The number grid points in longitude must be even');
 end
 d = J/2;
 % computing the known function values fjkplus and fjkminus
+
 fjkp = (1/2)*(fjk(:,1:d) + fjk(:,d+1:end));   % fjkplus
 fjkm = (1/2)*(fjk(:,1:d) - fjk(:,d+1:end));   % fjkminus
 
@@ -35,9 +36,21 @@ thj = thk(:,1);
 coeff = cos(th') - cos(thj);
 coefdm =  Wk./coeff;
 denom = sum(coefdm,1);
-if(ismember(0,thj)||ismember(pi,thj))
-    coefdm2 = coefdm.*sin(thj);
-    sinth = 1./sin(th);
+if(ismember(0,thj) && ismember(pi,thj))
+    fjkm([1,n],:) = 0;
+    sintj = sin(thj); sintj([1 n]) = 1;
+    coefdm2 = coefdm./sintj;
+    sinth = sin(th);
+elseif(ismember(0,thj))
+    fjkm(1,:) = 0;
+    sintj = sin(thj); sintj(1) = 1;
+    coefdm2 = coefdm./sintj;
+    sinth = sin(th);
+elseif(ismember(pi, thj))
+    fjkm(n,:) = 0;
+    sintj = sin(thj); sintj(n) = 1;
+    coefdm2 = coefdm./sintj;
+    sinth = sin(th);
 else
     coefdm2 = coefdm./sin(thj);
     sinth = sin(th);

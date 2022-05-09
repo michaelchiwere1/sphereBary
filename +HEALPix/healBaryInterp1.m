@@ -1,5 +1,5 @@
-function S = healBaryInterp(lb, th, lbk, thk, fjk, Wk)
-%HEALBARYINTERP
+function S = healBaryInterp1(lb, th, lbk, thk, fjk)
+%HEALBARYINTERP1
 % Implements a bivariate barycentric formula for interpolating on the sphere
 % for interpolation data given at HEALPx points on a sphere.
 % Usage:
@@ -12,7 +12,7 @@ function S = healBaryInterp(lb, th, lbk, thk, fjk, Wk)
 % Author: Michael Chiwere
 
 M = numel(th); S=zeros(M,1);
-[~,J] = size(fjk);
+[n,J] = size(fjk);
 % Condition requiring points in the even direction be even
 if mod(J,2) ~= 0
     error('The number of grid points in longitude must be even');
@@ -49,13 +49,33 @@ for j=1:J-1
     gkminus(j,:) = (sum(numminus,1)./sum(denom,1)).';
 end
 % interpolating in the theta direction
-csth = cos(th); csthk = cos(thk); sth= 1./sin(thk);
-for k=1:M
-    cdiff = csth(k) - csthk;
-    denom = Wk./cdiff;
-    numplus = denom .* gkplus(:,k);
-    numminus = sin(th(k))* (sth .* denom .* gkminus(:,k));
-    S(k) = (sum(numplus,1) - sum(numminus,1))./sum(denom,1);
-    
-end
+wk =  (-1) .^ (0:n-1)';
+
+% for k=1:M
+%     tempp = wk .* (cot(th(k)-thk));
+%     nump = tempp .* gkplus(:,k);
+%     numm = wk .* (csc(th(k)-thk)) .* gkminus(:,k);
+%     S(k) = (sum(nump) - sum(numm))/sum(tempp);
+% end
+    S = zeros(M,1);
+    thj = thk;
+    wk = (-1).^(0:n-1)';
+   % wk([1 n]) = wk([1 n])/2;
+    costh = cos(th);
+    cosj = cos(thj);
+    sinth = sin(th);
+    sintk = sin(thj);
+    for k=1:M
+        temp1 =  wk./(costh(k) - cosj);
+        temp = sintk .* temp1;
+        tempn =  temp .* gkplus(:,k);
+        Sl = sum(tempn)./sum(temp);
+        
+        
+        tempr = -temp1 .* gkminus(:,k);
+        %tempd = temp1 .* sintk;
+        Sr = -sinth(k) * (sum(tempr)./sum(-temp));
+        
+        S(k) = Sl + Sr;
+    end
 end

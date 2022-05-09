@@ -5,7 +5,7 @@ s = spherefun(@(la,th) cosh(sin(cos(la).*sin(th)+50*(cos(la).*sin(th)).*(sin(la)
 
 n = 400; m = 2*n;
 % Full lat-lon grid
-thk = pi/n*(0:n); 
+thk = pi/(n-1)*(0:n-1); 
 lbj =  -pi+(2*pi/m)*(0:m-1); 
 [lbj, thj] = meshgrid(lbj,thk);
 % Data at the grid
